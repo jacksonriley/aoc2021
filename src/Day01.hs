@@ -1,4 +1,5 @@
 module Day01 where
+
 import Data.List (foldl')
 
 -- Find how many depth measurements are greater than the one before.

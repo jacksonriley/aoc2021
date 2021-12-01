@@ -22,7 +22,7 @@ libmain :: Maybe Int -> IO ()
 libmain x =
   case x of
     Just num -> runDay' num
-    Nothing -> mapM_ runDay' [12 ..]
+    Nothing -> mapM_ runDay' [1 ..]
 
 runDay' :: Int -> IO ()
 runDay' n

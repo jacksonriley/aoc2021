@@ -5,9 +5,7 @@ import Test.Hspec
 import Text.RawString.QQ
 
 main :: IO ()
-main =
-  hspec $ do
-    test1
+main = hspec $ do test1
 
 test1 =
   let input =

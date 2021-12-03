@@ -1,6 +1,6 @@
 module Day03 where
 
-import Data.List (transpose, foldl')
+import Data.List (foldl', transpose)
 
 day3a :: String -> Int
 day3a = product . map binToDec . calculateGammaAndEpsilon . parse
@@ -15,13 +15,21 @@ parse = transpose . map (map (read . pure)) . lines
 -- Calculate gamma and epsilon by using a "is the sum greater than length/2"
 -- definition for most common bit
 calculateGammaAndEpsilon :: [[Int]] -> [[Int]]
-calculateGammaAndEpsilon x = [map convertG summed, map convertD summed] where
+calculateGammaAndEpsilon x = [map convertG summed, map convertD summed]
+  where
     summed = map sum x
     boundary = length (head x) `div` 2
-    convertG s = if s > boundary then 1 else 0
-    convertD s = if s > boundary then 0 else 1
+    convertG s =
+      if s > boundary
+        then 1
+        else 0
+    convertD s =
+      if s > boundary
+        then 0
+        else 1
 
 -- Convert binary to decimal - e.g. [1, 0, 1] to 5
 binToDec :: [Int] -> Int
-binToDec = foldl' f 0 where
-    f acc x = 2*acc + x
+binToDec = foldl' f 0
+  where
+    f acc x = 2 * acc + x

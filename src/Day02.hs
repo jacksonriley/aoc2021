@@ -9,12 +9,15 @@ data Direction
   deriving (Show)
 
 day2a :: String -> Int
-day2a input = position * depth where
-  (position, depth) = foldl' accumDir (0, 0) . map parse . lines $ input
+day2a input = position * depth
+  where
+    (position, depth) = foldl' accumDir (0, 0) . map parse . lines $ input
 
 day2b :: String -> Int
-day2b input = position * depth where
-  (_, position, depth) = foldl' accumDir2 (0, 0, 0) . map parse . lines $ input
+day2b input = position * depth
+  where
+    (_, position, depth) =
+      foldl' accumDir2 (0, 0, 0) . map parse . lines $ input
 
 parse :: String -> Direction
 parse = convert . words

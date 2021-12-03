@@ -2,13 +2,16 @@
 
 import Day01 (day1a, day1b)
 import Day02 (day2a, day2b)
+import Day03 (day3a, day3b)
 import Test.Hspec
 import Text.RawString.QQ
 
 main :: IO ()
-main = hspec $ do
-  test1
-  test2
+main =
+  hspec $ do
+    test1
+    test2
+    test3
 
 test1 =
   let input =
@@ -37,3 +40,21 @@ forward 2|]
    in describe "test2" $ do
         it "a" $ do day2a input `shouldBe` (150 :: Int)
         it "b" $ do day2b input `shouldBe` (900 :: Int)
+
+test3 =
+  let input =
+        [r|00100
+11110
+10110
+10111
+10101
+01111
+00111
+11100
+10000
+11001
+00010
+01010|]
+   in describe "test3" $ do
+        it "a" $ do day3a input `shouldBe` (198 :: Int)
+        it "b" $ do day3b input `shouldBe` (230 :: Int)

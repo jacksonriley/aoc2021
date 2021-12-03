@@ -4,6 +4,7 @@ module Lib
 
 import Day01
 import Day02
+import Day03
 import GHC.RTS.Flags (GCFlags(numa))
 import Text.Printf
 
@@ -29,4 +30,5 @@ runDay' :: Int -> IO ()
 runDay' n
   | n == 1 = runDay 1 (day1a, day1b)
   | n == 2 = runDay 2 (day2a, day2b)
+  | n == 3 = runDay 3 (day3a, day3b)
   | otherwise = error "Haven't implemented that day yet"

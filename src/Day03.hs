@@ -1,6 +1,6 @@
 module Day03 where
 
-import Data.List (transpose)
+import Data.List (transpose, foldl')
 
 day3a :: String -> Int
 day3a = product . map binToDec . calculateGammaAndEpsilon . parse
@@ -23,5 +23,5 @@ calculateGammaAndEpsilon x = [map convertG summed, map convertD summed] where
 
 -- Convert binary to decimal - e.g. [1, 0, 1] to 5
 binToDec :: [Int] -> Int
-binToDec = fst . foldr f (0, 1) where
-    f x (acc, p) = (acc + x*p, p*2)
+binToDec = foldl' f 0 where
+    f acc x = 2*acc + x

@@ -1,5 +1,7 @@
 module Day03 where
 
+import Data.List (transpose)
+
 day3a :: String -> Int
 day3a = product . map binToDec . calculateGammaAndEpsilon . parse
 
@@ -9,11 +11,6 @@ day3b = undefined
 -- Parses e.g. "101\n011" into [[1,0], [0,1], [1,1]]
 parse :: String -> [[Int]]
 parse = transpose . map (map (read . pure)) . lines
-
--- Transposes a list of lists - e.g. takes [[1, 2], [3, 4]] to [[1, 3], [2, 4]]
-transpose :: [[a]] -> [[a]]
-transpose ([]:_) = []
-transpose x = map head x : transpose (map tail x)
 
 -- Calculate gamma and epsilon by using a "is the sum greater than length/2"
 -- definition for most common bit

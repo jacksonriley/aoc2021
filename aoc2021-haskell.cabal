@@ -29,6 +29,7 @@ library
       Day02
       Day03
       Day04
+      Day05
       Lib
   other-modules:
       Paths_aoc2021_haskell
@@ -43,6 +44,7 @@ library
     , megaparsec
     , parsec
     , raw-strings-qq
+    , split
   default-language: Haskell2010
 
 executable aoc2021-haskell-exe
@@ -62,6 +64,7 @@ executable aoc2021-haskell-exe
     , megaparsec
     , parsec
     , raw-strings-qq
+    , split
   default-language: Haskell2010
 
 test-suite aoc2021-haskell-test
@@ -82,4 +85,5 @@ test-suite aoc2021-haskell-test
     , megaparsec
     , parsec
     , raw-strings-qq
+    , split
   default-language: Haskell2010

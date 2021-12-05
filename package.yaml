@@ -28,6 +28,7 @@ dependencies:
 - raw-strings-qq
 - extra
 - megaparsec
+- split
 
 library:
   source-dirs: src

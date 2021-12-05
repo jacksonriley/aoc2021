@@ -19,14 +19,12 @@ type Parser = M.Parsec Void String
 day4a :: String -> Int
 day4a input = calculateScore calledNums firstWinner
   where
-    (calledNums, firstWinner) =
-      head . uncurry findWinners . getBoards $ input
+    (calledNums, firstWinner) = head . uncurry findWinners . getBoards $ input
 
 day4b :: String -> Int
 day4b input = calculateScore calledNums lastWinner
   where
-    (calledNums, lastWinner) =
-      last . uncurry findWinners . getBoards $ input
+    (calledNums, lastWinner) = last . uncurry findWinners . getBoards $ input
 
 getBoards :: String -> ([Int], [Board])
 getBoards = fromRight' . M.parse parse ""
@@ -69,9 +67,8 @@ parse = do
 
 parseBoard :: Parser Board
 parseBoard = do
-  let
-    endOrNewline = M.eof <|> void (C.char '\n')
-    line =
+  let endOrNewline = M.eof <|> void (C.char '\n')
+      line =
         M.many (C.char ' ') *> L.decimal `M.sepBy1` M.some (C.char ' ') <*
         endOrNewline
    in do lines <- M.someTill line endOrNewline

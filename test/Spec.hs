@@ -5,6 +5,7 @@ import Day02 (day2a, day2b)
 import Day03 (day3a, day3b)
 import Day04 (day4a, day4b)
 import Day05 (day5a, day5b)
+import Day06 (day6a, day6b)
 import Test.Hspec
 import Text.RawString.QQ
 
@@ -16,6 +17,7 @@ main =
     test3
     test4
     test5
+    test6
 
 test1 =
   let input =
@@ -103,3 +105,9 @@ test5 =
    in describe "test5" $ do
         it "a" $ do day5a input `shouldBe` (5 :: Int)
         it "b" $ do day5b input `shouldBe` (12 :: Int)
+
+test6 =
+  let input = "3,4,3,1,2"
+   in describe "test6" $ do
+        it "a" $ do day6a input `shouldBe` (5934 :: Int)
+        it "b" $ do day6b input `shouldBe` (26984457539 :: Int)

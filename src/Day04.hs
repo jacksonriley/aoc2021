@@ -40,7 +40,7 @@ findWinners bingoNums = go 1 []
             partition (hasBoardWon . S.fromList $ take n bingoNums) boards
        in go
             (n + 1)
-            (alreadyWon ++ map (\w -> (take n bingoNums, w)) winners)
+            (alreadyWon ++ zip (repeat (take n bingoNums)) winners)
             notYetWon
 
 -- Check whether or not a board has won BINGO.

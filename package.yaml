@@ -33,6 +33,10 @@ dependencies:
 library:
   source-dirs: src
 
+default-extensions:
+  - ScopedTypeVariables
+  - TypeApplications
+
 executables:
   aoc2021-haskell-exe:
     main:                Main.hs

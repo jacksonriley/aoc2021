@@ -21,7 +21,7 @@ parse =
   foldl' (\acc n -> M.insertWith (+) n 1 acc) M.empty . map read . splitOn ","
 
 -- Simulates a day:
---  - The number of fish at index 0 determine how many fish should be added to
+--  - The number of fish at day 0 determine how many fish should be added to
 --    those at day 6 and day 8
 --  - The rest of the fish each decrease their day by 1
 simulateDay :: M.Map Int Int -> M.Map Int Int

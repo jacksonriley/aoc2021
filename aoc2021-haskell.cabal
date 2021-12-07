@@ -31,11 +31,15 @@ library
       Day04
       Day05
       Day06
+      Day07
       Lib
   other-modules:
       Paths_aoc2021_haskell
   hs-source-dirs:
       src
+  default-extensions:
+      ScopedTypeVariables
+      TypeApplications
   build-depends:
       base >=4.7 && <5
     , containers
@@ -54,6 +58,9 @@ executable aoc2021-haskell-exe
       Paths_aoc2021_haskell
   hs-source-dirs:
       app
+  default-extensions:
+      ScopedTypeVariables
+      TypeApplications
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       aoc2021-haskell
@@ -75,6 +82,9 @@ test-suite aoc2021-haskell-test
       Paths_aoc2021_haskell
   hs-source-dirs:
       test
+  default-extensions:
+      ScopedTypeVariables
+      TypeApplications
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       aoc2021-haskell

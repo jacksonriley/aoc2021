@@ -8,6 +8,7 @@ import Day05 (day5a, day5b)
 import Day06 (day6a, day6b)
 import Day07 (day7a, day7b)
 import Day08 (day8a, day8b)
+import Day09 (day9a, day9b)
 import Test.Hspec
 import Text.RawString.QQ
 
@@ -22,6 +23,7 @@ main =
     test6
     test7
     test8
+    test9
 
 test1 =
   let input =
@@ -137,3 +139,14 @@ gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce
    in describe "test8" $ do
         it "a" $ do day8a input `shouldBe` (26 :: Int)
         it "b" $ do day8b input `shouldBe` (61229 :: Int)
+
+test9 =
+  let input =
+        [r|2199943210
+3987894921
+9856789892
+8767896789
+9899965678|]
+   in describe "test9" $ do
+        it "a" $ do day9a input `shouldBe` (15 :: Int)
+        it "b" $ do day9b input `shouldBe` (1134 :: Int)

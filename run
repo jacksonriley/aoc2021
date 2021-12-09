@@ -1,2 +1,0 @@
-#!/bin/bash
-stack build --exec "aoc2021-haskell-exe $1"

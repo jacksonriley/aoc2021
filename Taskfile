@@ -1,0 +1,44 @@
+#!/bin/bash
+
+function run {
+    stack build
+    if [[ -n "$1" ]]; then
+        run_single "$1"
+    else
+        for d in {1..25}
+        do
+            f=$(printf "%02d" "$d")
+            if [ -f "./src/Day$f.hs" ]; then
+                run_single "$d"
+            fi
+        done
+    fi
+}
+
+function run_single {
+    echo "Day $1:"
+    echo "======="
+    ./.stack-work/dist/x86_64-osx/Cabal-3.2.1.0/build/aoc2021-haskell-exe/aoc2021-haskell-exe "$1"
+    echo ""
+}
+
+function static {
+    find . -type f -name "*.hs" | xargs -0 hindent
+    hlint src
+}
+
+function watch {
+    ./watcher "$1"
+}
+
+function test {
+    stack test
+}
+
+function help {
+    echo "$0 <task> <args>"
+    echo "Tasks:"
+    compgen -A function | cat -n
+}
+
+"${@:-help}"

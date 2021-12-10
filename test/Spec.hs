@@ -9,6 +9,7 @@ import Day06 (day6a, day6b)
 import Day07 (day7a, day7b)
 import Day08 (day8a, day8b)
 import Day09 (day9a, day9b)
+import Day10 (day10a, day10b)
 import Test.Hspec
 import Text.RawString.QQ
 
@@ -24,6 +25,7 @@ main =
     test7
     test8
     test9
+    test10
 
 test1 =
   let input =
@@ -150,3 +152,19 @@ test9 =
    in describe "test9" $ do
         it "a" $ do day9a input `shouldBe` (15 :: Int)
         it "b" $ do day9b input `shouldBe` (1134 :: Int)
+
+test10 =
+  let input =
+        [r|[({(<(())[]>[[{[]{<()<>>
+[(()[<>])]({[<{<<[]>>(
+{([(<{}[<>[]}>{[]{[(<()>
+(((({<>}<{<{<>}{[]{[]{}
+[[<[([]))<([[{}[[()]]]
+[{[{({}]{}}([{[{{{}}([]
+{<[[]]>}<{[{[{[]{()[[[]
+[<(<(<(<{}))><([]([]()
+<{([([[(<>()){}]>(<<{{
+<{([{{}}[<[[[<>{}]]]>[]]|]
+   in describe "test10" $ do
+        it "a" $ do day10a input `shouldBe` (26397 :: Int)
+        it "b" $ do day10b input `shouldBe` (288957 :: Int)

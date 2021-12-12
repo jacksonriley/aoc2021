@@ -11,6 +11,7 @@ import Day08 (day8a, day8b)
 import Day09 (day9a, day9b)
 import Day10 (day10a, day10b)
 import Day11 (day11a, day11b)
+import Day12 (day12a, day12b)
 import Test.Hspec
 import Text.RawString.QQ
 
@@ -28,6 +29,7 @@ main =
     test9
     test10
     test11
+    test12
 
 test1 =
   let input =
@@ -187,3 +189,27 @@ test11 =
    in describe "test11" $ do
         it "a" $ do day11a input `shouldBe` (1656 :: Int)
         it "b" $ do day11b input `shouldBe` (195 :: Int)
+
+test12 =
+  let input =
+        [r|fs-end
+he-DX
+fs-he
+start-DX
+pj-DX
+end-zg
+zg-sl
+zg-pj
+pj-he
+RW-he
+fs-DX
+pj-RW
+zg-RW
+start-pj
+he-WI
+zg-he
+pj-fs
+start-RW|]
+   in describe "test12" $ do
+        it "a" $ do day12a input `shouldBe` (226 :: Int)
+        it "b" $ do day12b input `shouldBe` (3509 :: Int)

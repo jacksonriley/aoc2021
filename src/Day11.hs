@@ -85,7 +85,7 @@ flash m flashed
   let toFlash =
         S.fromList .
         map fst .
-        filter (\(pos, val) -> val > 9 && (not $ pos `S.member` flashed)) $
+        filter (\(pos, val) -> val > 9 && not (pos `S.member` flashed)) $
         M.toList m
       m' =
         foldl'

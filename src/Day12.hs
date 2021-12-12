@@ -4,6 +4,7 @@ import qualified Data.Map.Strict as M
 import qualified Data.Set as S
 import Data.List.Split (splitOn)
 import Data.Char (isLower)
+import Data.Maybe (isNothing)
 
 type Cave = String
 type CaveMap = M.Map String (S.Set String)
@@ -14,7 +15,7 @@ day12a input = length $ dfs caveMap S.empty "start" where
   caveMap = parse input
 
 day12b :: String -> Int
-day12b input = length $ dfs2 caveMap M.empty "start" where
+day12b input = length $ dfs2 caveMap S.empty Nothing "start" where
   caveMap = parse input
 
 parse :: String -> CaveMap
@@ -31,11 +32,14 @@ dfs m seen cave = map (cave :) $ concatMap (dfs m newSeen) neighbours where
   neighbours = filter (\c -> not $ c `S.member` seen) . S.toList $ m M.! cave
   newSeen = if isSmall cave then S.insert cave seen else seen
 
-dfs2 :: CaveMap -> M.Map Cave Int -> Cave -> [Path]
-dfs2 m seen "end" = [["end"]]
-dfs2 m seen cave = map (cave :) $ concatMap (dfs2 m newSeen) neighbours where
+dfs2 :: CaveMap -> S.Set Cave -> Maybe Cave -> Cave -> [Path]
+dfs2 _ seen _ "end" = [["end"]]
+dfs2 m seen twice cave = map (cave :) $ concatMap (dfs2 m newSeen newTwice) neighbours where
   neighbours = filter filterF . S.toList $ m M.! cave
-  newSeen = if isSmall cave then M.insertWith (+) cave 1 seen else seen
+  newSeen = if isSmall cave then S.insert cave seen else seen
+  newTwice = case twice of
+    Just _ -> twice
+    Nothing -> if isSmall cave && cave `S.member` seen then Just cave else Nothing
   -- Can go into a small cave if we've never gone into it before, or if we've never gone into any small caves twice. We can never re-enter start!
   filterF "start" = False
-  filterF n = M.notMember n newSeen || M.null (M.filter (==2) newSeen)
+  filterF n = S.notMember n newSeen || isNothing newTwice

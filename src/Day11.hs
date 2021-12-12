@@ -16,16 +16,7 @@ day11b :: String -> Int
 day11b = tickFindSync . parse
 
 naiveNeighbours :: Position -> [Position]
-naiveNeighbours (x, y) =
-  [ (x + 1, y)
-  , (x + 1, y + 1)
-  , (x, y + 1)
-  , (x - 1, y + 1)
-  , (x - 1, y)
-  , (x - 1, y - 1)
-  , (x, y - 1)
-  , (x + 1, y - 1)
-  ]
+naiveNeighbours (x, y) = [(x', y') | x' <- [x-1..x+1], y' <- [y-1..y+1], x /= x' || y /= y']
 
 neighbours :: Position -> M.Map Position a -> [Position]
 neighbours (x, y) m = foldl' go [] $ naiveNeighbours (x, y)

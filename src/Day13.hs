@@ -38,9 +38,10 @@ parseFolds input = do
   line <- lines input
   let (inst:amount:_) = splitOn "=" line
   let fold =
-        if inst == "fold along x"
-          then X $ read amount
-          else Y $ read amount
+        case inst of
+          "fold along x" -> X $ read amount
+          "fold along y" -> Y $ read amount
+          other -> error other
   return fold
 
 doFold :: S.Set Position -> Fold -> S.Set Position
@@ -63,9 +64,9 @@ printPoints points =
       maxY = snd $ maximumBy (\(x, y) (x', y') -> y `compare` y') points
       line y =
         map
-          (\pos ->
-             if S.member pos points
+          (\x ->
+             if S.member (x, y) points
                then '#'
-               else ' ') $
-        zip [0 .. maxX] $ repeat y
+               else ' ')
+          [0 .. maxX]
    in (:) '\n' $ unlines $ map line [0 .. maxY]

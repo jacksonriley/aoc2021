@@ -15,6 +15,22 @@ function run {
     fi
 }
 
+function bench {
+    stack build
+    if [[ -n "$1" ]]; then
+        bench_single "$1"
+    else
+        for d in {1..25}
+        do
+            f=$(printf "%02d" "$d")
+            if [ -f "./src/Day$f.hs" ]; then
+                bench_single "$d"
+            fi
+        done
+        bench_total
+    fi
+}
+
 function run_single {
     echo "Day $1:"
     echo "======="
@@ -22,8 +38,22 @@ function run_single {
     echo ""
 }
 
+function bench_single {
+    echo "Day $1:"
+    echo "======="
+    hyperfine "./.stack-work/dist/x86_64-osx/Cabal-3.2.1.0/build/aoc2021-haskell-exe/aoc2021-haskell-exe $1"
+    echo ""
+}
+
+function bench_total {
+    echo "Total:"
+    echo "======="
+    hyperfine "./.stack-work/dist/x86_64-osx/Cabal-3.2.1.0/build/aoc2021-haskell-exe/aoc2021-haskell-exe" --ignore-failure
+    echo ""
+}
+
 function static {
-    find . -type f -name "*.hs" | xargs -0 hindent
+    find . -type f -name "*.hs" | xargs hindent
     hlint src
 }
 

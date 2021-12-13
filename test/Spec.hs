@@ -173,7 +173,6 @@ test10 =
         it "a" $ do day10a input `shouldBe` (26397 :: Int)
         it "b" $ do day10b input `shouldBe` (288957 :: Int)
 
-
 test11 =
   let input =
         [r|5483143223

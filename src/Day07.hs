@@ -39,10 +39,7 @@ day7a input = totalLinearFuel median sorted
 -- Similar reasoning goes for n < minimum < n + 1 < mean, so we only ever have
 -- to check floor(mean) and ceil(mean).
 day7b :: String -> Int
-day7b input =
-  min
-    (totalTriangularFuel (ceiling mean) nums)
-    (totalTriangularFuel (floor mean) nums)
+day7b input = min (totalTriangularFuel (ceiling mean) nums) (totalTriangularFuel (floor mean) nums)
   where
     mean = fromIntegral (sum nums) / fromIntegral (length nums)
     nums = parse input

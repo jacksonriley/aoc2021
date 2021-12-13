@@ -16,7 +16,8 @@ day11b :: String -> Int
 day11b = tickFindSync . parse
 
 naiveNeighbours :: Position -> [Position]
-naiveNeighbours (x, y) = [(x', y') | x' <- [x-1..x+1], y' <- [y-1..y+1], x /= x' || y /= y']
+naiveNeighbours (x, y) =
+  [(x', y') | x' <- [x - 1 .. x + 1], y' <- [y - 1 .. y + 1], x /= x' || y /= y']
 
 neighbours :: Position -> M.Map Position a -> [Position]
 neighbours (x, y) m = foldl' go [] $ naiveNeighbours (x, y)
@@ -74,16 +75,10 @@ flash m flashed
   -- The octopi to flash are those with values >=9 and who have not already flashed.
  =
   let toFlash =
-        S.fromList .
-        map fst .
-        filter (\(pos, val) -> val > 9 && not (pos `S.member` flashed)) $
+        S.fromList . map fst . filter (\(pos, val) -> val > 9 && not (pos `S.member` flashed)) $
         M.toList m
       m' =
-        foldl'
-          (\acc pos ->
-             foldl' (\acc' n -> M.insertWith (+) n 1 acc') acc $
-             neighbours pos m)
-          m $
+        foldl' (\acc pos -> foldl' (\acc' n -> M.insertWith (+) n 1 acc') acc $ neighbours pos m) m $
         S.toList toFlash
    in if S.null toFlash
         then m

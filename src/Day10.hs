@@ -20,10 +20,7 @@ day10a = sum . map scoreIllegal . mapMaybe (getCorrupted . classifyLine) . lines
 day10b :: String -> Int
 day10b input = scores !! scoresMid
   where
-    scores =
-      sort .
-      map scoreIncomplete . mapMaybe (getIncomplete . classifyLine) . lines $
-      input
+    scores = sort . map scoreIncomplete . mapMaybe (getIncomplete . classifyLine) . lines $ input
     scoresMid = length scores `div` 2
     getIncomplete (Corrupted _) = Nothing
     getIncomplete (Incomplete s) = Just s
@@ -71,8 +68,7 @@ scoreIncomplete = foldl' go 0
       | c == '[' = 2
       | c == '{' = 3
       | c == '<' = 4
-      | otherwise =
-        error $ "Unexpected character in the incomplete list: " ++ [c]
+      | otherwise = error $ "Unexpected character in the incomplete list: " ++ [c]
 
 -- Is a character an opening bracket
 isOpen :: Char -> Bool

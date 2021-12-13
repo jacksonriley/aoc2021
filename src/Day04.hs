@@ -36,12 +36,8 @@ findWinners bingoNums = go 1 []
   where
     go _ alreadyWon [] = alreadyWon
     go n alreadyWon boards =
-      let (winners, notYetWon) =
-            partition (hasBoardWon . S.fromList $ take n bingoNums) boards
-       in go
-            (n + 1)
-            (alreadyWon ++ zip (repeat (take n bingoNums)) winners)
-            notYetWon
+      let (winners, notYetWon) = partition (hasBoardWon . S.fromList $ take n bingoNums) boards
+       in go (n + 1) (alreadyWon ++ zip (repeat (take n bingoNums)) winners) notYetWon
 
 -- Check whether or not a board has won BINGO.
 hasBoardWon :: S.Set Int -> Board -> Bool
@@ -68,8 +64,6 @@ parse = do
 parseBoard :: Parser Board
 parseBoard = do
   let endOrNewline = M.eof <|> void (C.char '\n')
-      line =
-        M.many (C.char ' ') *> L.decimal `M.sepBy1` M.some (C.char ' ') <*
-        endOrNewline
+      line = M.many (C.char ' ') *> L.decimal `M.sepBy1` M.some (C.char ' ') <* endOrNewline
    in do lines <- M.someTill line endOrNewline
          return (Board lines)

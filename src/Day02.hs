@@ -16,8 +16,7 @@ day2a input = position * depth
 day2b :: String -> Int
 day2b input = position * depth
   where
-    (_, position, depth) =
-      foldl' accumDir2 (0, 0, 0) . map parse . lines $ input
+    (_, position, depth) = foldl' accumDir2 (0, 0, 0) . map parse . lines $ input
 
 parse :: String -> Direction
 parse = convert . words

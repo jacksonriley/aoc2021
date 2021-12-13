@@ -17,9 +17,7 @@ day5b = getNumCrossingPoints . parse
 -- segments cross.
 getNumCrossingPoints :: [(Position, Position)] -> Int
 getNumCrossingPoints =
-  length .
-  M.filter (> 1) .
-  M.fromListWith (+) . flip zip (repeat 1) . concatMap getPoints
+  length . M.filter (> 1) . M.fromListWith (+) . flip zip (repeat 1) . concatMap getPoints
 
 -- Get all of the points between two positions (assuming that they lie either
 -- horizontally, vertically, or on a diagonal with gradient 1)

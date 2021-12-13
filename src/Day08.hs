@@ -6,8 +6,7 @@ import qualified Data.Map.Strict as M
 import qualified Data.Set as S
 
 day8a :: String -> Int
-day8a =
-  length . filter (\x -> length x `elem` [2, 3, 4, 7]) . concatMap snd . parse
+day8a = length . filter (\x -> length x `elem` [2, 3, 4, 7]) . concatMap snd . parse
 
 day8b :: String -> Int
 day8b = sum . map solveLine . parse
@@ -64,17 +63,9 @@ deduceMapping signals =
 --   - 2 contains jumbledC but not jumbledF
 --   - 3 contains jumbledC and jumbledF
 --   - 5 contains jumbledF but not jumbledC
-    numTwo =
-      head .
-      filter (\s -> (jumbledC `S.member` s) && not (jumbledF `S.member` s)) $
-      fives
-    numThree =
-      head . filter (\s -> (jumbledC `S.member` s) && (jumbledF `S.member` s)) $
-      fives
-    numFive =
-      head .
-      filter (\s -> not (jumbledC `S.member` s) && (jumbledF `S.member` s)) $
-      fives
+    numTwo = head . filter (\s -> (jumbledC `S.member` s) && not (jumbledF `S.member` s)) $ fives
+    numThree = head . filter (\s -> (jumbledC `S.member` s) && (jumbledF `S.member` s)) $ fives
+    numFive = head . filter (\s -> not (jumbledC `S.member` s) && (jumbledF `S.member` s)) $ fives
 --  This allows us to tell apart 0 and 9 based on the intersection with numFive
     numZero = head . filter (\s -> not $ numFive `S.isSubsetOf` s) $ sixes
     numNine = head . filter (\s -> s /= numSix && s /= numZero) $ sixes

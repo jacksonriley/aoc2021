@@ -43,13 +43,11 @@ findLowPoints tileMap = M.foldlWithKey' go [] tileMap
 findBasins :: M.Map Position Int -> [S.Set Position]
 findBasins tileMap =
   let lowPoints = map fst $ findLowPoints tileMap
-      basins =
-        foldl' (\acc low -> floodFill tileMap [low] S.empty : acc) [] lowPoints
+      basins = foldl' (\acc low -> floodFill tileMap [low] S.empty : acc) [] lowPoints
    in basins
 
 -- Flood fill from a given set of positions until a wall of 9s or the edge.
-floodFill ::
-     M.Map Position Int -> [Position] -> S.Set Position -> S.Set Position
+floodFill :: M.Map Position Int -> [Position] -> S.Set Position -> S.Set Position
 floodFill tileMap (x:xs) seen = floodFill tileMap toExplore newSeen
   where
     newSeen = S.insert x seen

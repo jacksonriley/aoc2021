@@ -17,8 +17,7 @@ findFishAfter nDays = sum . (!! nDays) . iterate simulateDay . parse
 -- Returns a map of stage of fish lifecycle to the number of fish who are at
 -- that stage.
 parse :: String -> M.Map Int Int
-parse =
-  foldl' (\acc n -> M.insertWith (+) n 1 acc) M.empty . map read . splitOn ","
+parse = foldl' (\acc n -> M.insertWith (+) n 1 acc) M.empty . map read . splitOn ","
 
 -- Simulates a day:
 --  - The number of fish at day 0 determine how many fish should be added to

@@ -38,7 +38,7 @@ countChars =
 -- Get the difference between the most common and least common element after
 -- carrying out `n` steps.
 -- Do this by keeping track of the numbers of each type of pair - very similar
--- approach to the lanturnfish challenge (day 6).
+-- approach to the lanternfish challenge (day 6).
 getDiff :: Int -> String -> Int
 getDiff n input = (last freqs - head freqs) `div` 2
   where

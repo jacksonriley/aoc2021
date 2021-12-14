@@ -13,6 +13,7 @@ import Day10 (day10a, day10b)
 import Day11 (day11a, day11b)
 import Day12 (day12a, day12b)
 import Day13 (day13a, day13b)
+import Day14 (day14a, day14b)
 import Test.Hspec
 import Text.RawString.QQ
 
@@ -32,6 +33,7 @@ main =
     test11
     test12
     test13
+    test14
 
 test1 =
   let input =
@@ -239,3 +241,27 @@ test13 =
 fold along y=7
 fold along x=5|]
    in describe "test13" $ do it "a" $ do day13a input `shouldBe` (17 :: Int)
+
+test14 =
+  let input =
+        [r|NNCB
+
+CH -> B
+HH -> N
+CB -> H
+NH -> C
+HB -> C
+HC -> B
+HN -> C
+NN -> C
+BH -> H
+NC -> B
+NB -> B
+BN -> B
+BB -> N
+BC -> B
+CC -> N
+CN -> C|]
+   in describe "test14" $ do
+        it "a" $ do day14a input `shouldBe` (1588 :: Int)
+        it "b" $ do day14b input `shouldBe` (2188189693529 :: Int)

@@ -66,7 +66,7 @@ printPoints points =
         map
           (\x ->
              if S.member (x, y) points
-               then '#'
+               then '█'
                else ' ')
           [0 .. maxX]
    in (:) '\n' $ unlines $ map line [0 .. maxY]

@@ -25,10 +25,10 @@ parse input = (template, insertions)
 insert :: M.Map Pair Char -> M.Map Pair Int -> M.Map Pair Int
 insert pairs = M.fromListWith (+) . concatMap doReplacement . M.toList
   where
-    doReplacement ((left, right), count) =
+    doReplacement orig@((left, right), count) =
       case M.lookup (left, right) pairs of
         Just c -> [((left, c), count), ((c, right), count)]
-        Nothing -> [((left, right), count)]
+        Nothing -> [orig]
 
 countChars :: M.Map Pair Int -> M.Map Char Int
 countChars =

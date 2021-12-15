@@ -41,7 +41,7 @@ function run_single {
 function bench_single {
     echo "Day $1:"
     echo "======="
-    hyperfine "./.stack-work/dist/x86_64-osx/Cabal-3.2.1.0/build/aoc2021-haskell-exe/aoc2021-haskell-exe $1"
+    hyperfine "./.stack-work/dist/x86_64-osx/Cabal-3.2.1.0/build/aoc2021-haskell-exe/aoc2021-haskell-exe $1" --ignore-failure
     echo ""
 }
 

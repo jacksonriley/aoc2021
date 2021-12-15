@@ -40,7 +40,7 @@ countChars =
 -- Do this by keeping track of the numbers of each type of pair - very similar
 -- approach to the lanternfish challenge (day 6).
 getDiff :: Int -> String -> Int
-getDiff n input = (last freqs - head freqs) `div` 2
+getDiff n input = (maximum freqs - minimum freqs) `div` 2
   where
     (template, rules) = parse input
     -- Construct a map of all pairs in the template to the number of occurences
@@ -52,4 +52,4 @@ getDiff n input = (last freqs - head freqs) `div` 2
     -- unlike all other characters in the middle of the polymer.
     charOccurencesWithEnds =
       M.insertWith (+) (head template) 1 $ M.insertWith (+) (last template) 1 charOccurences
-    freqs = sort $ M.elems charOccurencesWithEnds
+    freqs = M.elems charOccurencesWithEnds

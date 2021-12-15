@@ -5,6 +5,7 @@ import Data.List (foldl', sortOn)
 import qualified Data.Map.Strict as M
 import qualified Data.Set as S
 import Debug.Trace
+import Data.Maybe (mapMaybe)
 
 type Position = (Int, Int)
 
@@ -19,7 +20,7 @@ type Distances = M.Map Position Int
 day15a = dijkstra . parse
 
 day15b :: String -> Int
-day15b = undefined
+day15b = dijkstra . constructLargerMap . parse
 
 naiveNeighbours :: Position -> [Position]
 naiveNeighbours (x, y) = [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
@@ -45,23 +46,44 @@ getGoal costMap = (maxX, maxY)
     maxX = maximum . map fst $ M.keys costMap
     maxY = maximum . map snd $ M.keys costMap
 
-popMin :: Queue -> Distances -> ((Position, Int), Queue)
-popMin queue distances = (minimumPos, queue')
+manhattan :: Position -> Position -> Int
+manhattan (x, y) (x', y') = abs (x-x') + abs (y-y')
+
+heuristic :: Position -> Position -> Int
+heuristic a b = x where
+  x = manhattan a b
+
+popMin :: Queue -> Distances -> Position -> ((Position, Int), Queue)
+popMin queue distances end = (minimumPos, queue')
   where
-    filtered = M.filterWithKey (\pos d -> S.member pos queue) distances
-    minimumPos = head . sortOn snd $ M.toList filtered
+    filtered = mapMaybe (\pos -> M.lookup pos distances >>= (\d -> Just $ (pos, d + heuristic pos end))) $ S.toList queue
+    (pos, d) = head $ sortOn snd filtered
+    minimumPos = (pos, d - heuristic pos end)
     queue' = S.delete (fst minimumPos) queue
 
+wrap :: Int -> Int
+wrap x = 1 + (x - 1) `mod` 9
+
+constructLargerMap :: CostMap -> CostMap
+constructLargerMap smallMap = bigBoy where
+  nX =  (+1) . maximum . map fst $ M.keys smallMap
+  nY =  (+1) . maximum . map snd $ M.keys smallMap
+  tiles = map (\t -> (t, manhattan (0, 0) t)) [(x, y) | x <- [0..4], y <- [0..4]]
+  bigBoy = foldl' makeTile M.empty tiles
+  makeTile acc ((dx, dy), dv) = M.union acc $ M.fromList $ map (\((x, y), v) -> ((x + nX * dx, y + nY * dy), wrap (v + dv))) $ M.toList smallMap
+
+
 dijkstra :: CostMap -> Int
-dijkstra costMap = endDistances M.! getGoal costMap
+dijkstra costMap = endDistances M.! end
   where
-    initialQueue = S.fromList $ M.keys costMap
+    end = getGoal costMap
+    initialQueue = S.singleton (0, 0)
     definiteDistances = M.singleton (0, 0) 0
-    endDistances = snd $ go initialQueue definiteDistances
-    go :: Queue -> Distances -> (Queue, Distances)
-    go queue distances =
-      let ((pos, d), queue') = popMin queue distances
-          ns = filter (`S.member` queue) $ neighbours pos costMap
+    endDistances = go initialQueue definiteDistances S.empty
+    go :: Queue -> Distances -> Queue -> Distances
+    go queue distances done =
+      let ((pos, d), queue') = popMin queue distances end
+          ns = filter (`S.notMember` done) $ neighbours pos costMap
           distances' = foldl' foldNeighbours distances ns
           foldNeighbours :: Distances -> Position -> Distances
           foldNeighbours acc n =
@@ -72,6 +94,8 @@ dijkstra costMap = endDistances M.! getGoal costMap
                       then M.insert n (d + nEntry) acc
                       else acc
                   Nothing -> M.insert n (d + nEntry) acc
-       in if pos == getGoal costMap
-            then (queue', distances')
-            else go queue' distances'
+          queue'' = foldl' (\acc x -> S.insert x acc) queue' ns
+          done' = S.insert pos done
+       in if pos == end
+            then distances'
+            else go queue'' distances' done'

@@ -54,7 +54,7 @@ constructLargerMap smallMap = bigBoy
   where
     nX = (+ 1) . maximum . map fst $ M.keys smallMap
     nY = (+ 1) . maximum . map snd $ M.keys smallMap
-    tiles = map (\t -> (t, manhattan (0, 0) t)) [(x, y) | x <- [0 .. 4], y <- [0 .. 4]]
+    tiles = [((x, y), manhattan (0, 0) (x, y)) | x <- [0 .. 4], y <- [0 .. 4]]
     bigBoy = foldl' makeTile M.empty tiles
     makeTile acc ((dx, dy), dv) =
       M.union acc $

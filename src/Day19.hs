@@ -40,6 +40,9 @@ day19a = length . fst . matchAll . parse
 day19b :: String -> Int
 day19b = maximum . map (uncurry manhattan) . pairs . S.toList . snd . matchAll . parse
 
+pairs :: [a] -> [(a, a)]
+pairs xs = [(x, y) | (x:ys) <- tails xs, y <- ys]
+
 positionFromList :: [Int] -> Position
 positionFromList [x, y, z] = V3 x y z
 positionFromList x = error $ "Tried to make a V3 from " ++ show x
@@ -83,7 +86,11 @@ matchTwo xs ys =
 matchAll :: M.Map Int (S.Set Position) -> (S.Set Position, S.Set Position)
 matchAll m = go (m M.! 0) (M.delete 0 m) (S.singleton $ V3 0 0 0)
   where
-    go :: S.Set Position -> M.Map Int (S.Set Position) -> S.Set Position -> (S.Set Position, S.Set Position)
+    go ::
+         S.Set Position
+      -> M.Map Int (S.Set Position)
+      -> S.Set Position
+      -> (S.Set Position, S.Set Position)
     go ps m scanners =
       if M.null m
         then (ps, scanners)
@@ -104,6 +111,3 @@ matchAll m = go (m M.! 0) (M.delete 0 m) (S.singleton $ V3 0 0 0)
       case matchTwo ps potentials of
         Just (scannerPos, newPs) -> Just (newPs, M.delete key m, S.insert scannerPos scanners)
         Nothing -> Nothing
-
-pairs :: [a] -> [(a, a)]
-pairs xs = [(x, y) | (x:ys) <- tails xs, y<-ys]

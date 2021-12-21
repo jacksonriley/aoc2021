@@ -29,6 +29,7 @@ dependencies:
 - extra
 - megaparsec
 - split
+- linear
 
 library:
   source-dirs: src

@@ -34,11 +34,11 @@ allOrientations p = concatMap (\(facing, rot) -> take 4 $ iterate rot facing) fa
       , (rotY . rotY $ rotY p, rotZ)
       ]
 
--- day19a :: String -> Int
-day19a = length . matchAll . parse
+day19a :: String -> Int
+day19a = length . fst . matchAll . parse
 
 day19b :: String -> Int
-day19b = undefined
+day19b = maximum . map (uncurry manhattan) . pairs . S.toList . snd . matchAll . parse
 
 positionFromList :: [Int] -> Position
 positionFromList [x, y, z] = V3 x y z
@@ -56,30 +56,14 @@ parseScanner input = (n, positions)
 manhattan :: Position -> Position -> Int
 manhattan (V3 x y z) (V3 x' y' z') = abs (x - x') + abs (y - y') + abs (z - z')
 
--- Transforms N positions to N(N-1)/2 distances between the positions, as a sort
--- of fingerprint
-fingerprint :: S.Set Position -> S.Set Int
-fingerprint positions = S.fromList [manhattan p p' | (p:ps) <- tails $ S.toList positions, p' <- ps]
-
--- Transforms N positions to N(N-1)/2 distances between the positions, as a sort
--- of fingerprint
-vectorFingerprint :: S.Set Position -> S.Set Position
-vectorFingerprint positions = S.fromList [p - p' | (p:ps) <- tails $ S.toList positions, p' <- ps]
-
--- Check if two scanner's sets of beacons overlap - if there are 12*11/2 of the
--- same distances then this is likely.
-matchesTwo :: S.Set Position -> S.Set Position -> Bool
-matchesTwo s s' = (>= 6 * 11) . S.size $ S.intersection f f'
-  where
-    f = fingerprint s
-    f' = fingerprint s'
-
 -- Given two scanner's sets of beacons, try to orientate the second such that
--- there are at least 12 points which overlap modulo a translation.
-matchTwo :: S.Set Position -> S.Set Position -> Maybe (S.Set Position)
+-- there are at least 12 points which overlap modulo a translation. Return the
+-- position of the second scanner relative to the first, along with the merged
+-- set of beacons in the first scanner's basis.
+matchTwo :: S.Set Position -> S.Set Position -> Maybe (Position, S.Set Position)
 matchTwo xs ys =
   case foldl' go Nothing . transpose . map allOrientations $ S.toList ys of
-    Just (offset, ys') -> Just $ foldl' (flip S.insert) xs $ map (+ offset) ys'
+    Just (offset, ys') -> Just (-offset, foldl' (flip S.insert) xs $ map (+ offset) ys')
     Nothing -> Nothing
   where
     go :: Maybe (Position, [Position]) -> [Position] -> Maybe (Position, [Position])
@@ -93,26 +77,33 @@ matchTwo xs ys =
           maximumBy (comparing snd) . M.toList . M.fromListWith (+) $
           [(x - y, 1) | x <- S.toList xs, y <- flippedYs]
 
-matchAll :: M.Map Int (S.Set Position) -> S.Set Position
-matchAll m = go (m M.! 0) (M.delete 0 m)
+-- Returns a tuple of
+-- - merged beacons
+-- - scanner positions
+matchAll :: M.Map Int (S.Set Position) -> (S.Set Position, S.Set Position)
+matchAll m = go (m M.! 0) (M.delete 0 m) (S.singleton $ V3 0 0 0)
   where
-    go :: S.Set Position -> M.Map Int (S.Set Position) -> S.Set Position
-    go ps m =
+    go :: S.Set Position -> M.Map Int (S.Set Position) -> S.Set Position -> (S.Set Position, S.Set Position)
+    go ps m scanners =
       if M.null m
-        then ps
-        else case M.foldlWithKey' (tryMatch ps m) Nothing m of
-               Just (newPs, newM) -> go newPs newM
+        then (ps, scanners)
+        else case M.foldlWithKey' (tryMatch ps m scanners) Nothing m of
+               Just (newPs, newM, newScanners) -> go newPs newM newScanners
                Nothing -> error "Didn't find any matches"
                  where 
     tryMatch ::
          S.Set Position
       -> M.Map Int (S.Set Position)
-      -> Maybe (S.Set Position, M.Map Int (S.Set Position))
+      -> S.Set Position
+      -> Maybe (S.Set Position, M.Map Int (S.Set Position), S.Set Position)
       -> Int
       -> S.Set Position
-      -> Maybe (S.Set Position, M.Map Int (S.Set Position))
-    tryMatch _ _ (Just x) _ _ = Just x
-    tryMatch ps m Nothing key potentials =
+      -> Maybe (S.Set Position, M.Map Int (S.Set Position), S.Set Position)
+    tryMatch _ _ _ (Just x) _ _ = Just x
+    tryMatch ps m scanners Nothing key potentials =
       case matchTwo ps potentials of
-        Just newPs -> Just (newPs, M.delete key m)
+        Just (scannerPos, newPs) -> Just (newPs, M.delete key m, S.insert scannerPos scanners)
         Nothing -> Nothing
+
+pairs :: [a] -> [(a, a)]
+pairs xs = [(x, y) | (x:ys) <- tails xs, y<-ys]

@@ -37,6 +37,7 @@ library:
 default-extensions:
   - ScopedTypeVariables
   - TypeApplications
+  - NamedFieldPuns
 
 executables:
   aoc2021-haskell-exe:

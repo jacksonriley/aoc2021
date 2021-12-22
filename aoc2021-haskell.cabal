@@ -45,6 +45,7 @@ library
       Day18
       Day19
       Day20
+      Day21
       Lib
   other-modules:
       Paths_aoc2021_haskell
@@ -53,6 +54,7 @@ library
   default-extensions:
       ScopedTypeVariables
       TypeApplications
+      NamedFieldPuns
   build-depends:
       base >=4.7 && <5
     , containers
@@ -75,6 +77,7 @@ executable aoc2021-haskell-exe
   default-extensions:
       ScopedTypeVariables
       TypeApplications
+      NamedFieldPuns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       aoc2021-haskell
@@ -100,6 +103,7 @@ test-suite aoc2021-haskell-test
   default-extensions:
       ScopedTypeVariables
       TypeApplications
+      NamedFieldPuns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       aoc2021-haskell

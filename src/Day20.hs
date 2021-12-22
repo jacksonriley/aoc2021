@@ -66,13 +66,13 @@ succP Lit = Dim
 succP Dim = Lit
 
 -- Yield the points outside a square with minX == minY and maxX == maxY with a
--- thickness of two.
+-- thickness of one.
 boundary :: Int -> Int -> [Position]
 boundary minX maxX =
-  [(x, y) | x <- [(minX - 2) .. (maxX + 2)], y <- beyonds] ++
+  [(x, y) | x <- [(minX - 1) .. (maxX + 1)], y <- beyonds] ++
   [(x, y) | y <- [minX .. maxX], x <- beyonds]
   where
-    beyonds = [minX - 2, minX - 1, maxX + 1, maxX + 2]
+    beyonds = [minX - 1, maxX + 1]
 
 -- Logic is to assume that totally empty squares tick to totally full squares
 -- and vice versa.

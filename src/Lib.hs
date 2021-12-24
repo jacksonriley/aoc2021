@@ -23,6 +23,7 @@ import Day18
 import Day19
 import Day20
 import Day21
+import Day22
 import GHC.RTS.Flags (GCFlags(numa))
 import Text.Printf
 
@@ -67,4 +68,5 @@ runDay' n
   | n == 19 = runDay 19 (show . day19a, show . day19b)
   | n == 20 = runDay 20 (show . day20a, show . day20b)
   | n == 21 = runDay 21 (show . day21a, show . day21b)
+  | n == 22 = runDay 22 (show . day22a, show . day22b)
   | otherwise = error "Haven't implemented that day yet"

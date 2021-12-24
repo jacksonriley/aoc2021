@@ -97,9 +97,8 @@ type DP = M.Map GameState' (Int, Int)
 -- counts.
 sum3 :: [(Int, Int)]
 sum3 =
---   map (\l -> (length l, head l)) . group . sort $
---   [a + b + c | a <- [1 .. 3], b <- [1 .. 3], c <- [1 .. 3]]
-    [(1,3),(3,4),(6,5),(7,6),(6,7),(3,8),(1,9)]
+  map (\l -> (length l, head l)) . group . sort $
+  [a + b + c | a <- [1 .. 3], b <- [1 .. 3], c <- [1 .. 3]]
 
 updateState :: GameState' -> Int -> GameState'
 updateState (p1, p2, s1, s2, P1) rollTotal = (p1', p2, s1', s2, P2)
@@ -112,17 +111,16 @@ updateState (p1, p2, s1, s2, P2) rollTotal = (p1, p2', s1, s2', P1)
     s2' = s2 + p2'
 
 rollDiracDice :: GameState' -> DP -> (DP, Int, Int)
-rollDiracDice gs@(p1, p2, s1, s2, turn) m =
-  case M.lookup gs m of
-    Just (w1, w2) -> (m, w1, w2)
-    Nothing ->
-      if s1 >= 21
-        then (M.insert gs (1, 0) m, 1, 0)
-        else if s2 >= 21
-               then (M.insert gs (0, 1) m, 0, 1)
-               else let (m', w1, w2) = foldl' go (m, 0, 0) sum3
-                     in (M.insert gs (w1, w2) m', w1, w2)
-      where go :: (DP, Int, Int) -> (Int, Int) -> (DP, Int, Int)
-            go (m', w1, w2) (numTimes, rollValue) =
-              let (m'', w1', w2') = rollDiracDice (updateState gs rollValue) m'
-               in (m'', w1 + numTimes * w1', w2 + numTimes * w2')
+rollDiracDice gs@(p1, p2, s1, s2, turn) m
+  | s1 >= 21 = (m, 1, 0)
+  | s2 >= 21 = (m, 0, 1)
+  | otherwise =
+    case M.lookup gs m of
+      Just (w1, w2) -> (m, w1, w2)
+      Nothing ->
+        let (m', w1, w2) = foldl' go (m, 0, 0) sum3
+         in (M.insert gs (w1, w2) m', w1, w2)
+        where go :: (DP, Int, Int) -> (Int, Int) -> (DP, Int, Int)
+              go (m', w1, w2) (numTimes, rollValue) =
+                let (m'', w1', w2') = rollDiracDice (updateState gs rollValue) m'
+                 in (m'', w1 + numTimes * w1', w2 + numTimes * w2')
